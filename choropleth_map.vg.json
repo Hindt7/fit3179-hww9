@@ -18,42 +18,33 @@
             "lookup": "properties.STE_NAME21",
             "from": {
                 "data": {
-                    "url": "data/aus_national_waste_by_category_2022_ver2.csv"
+                    "url": "data/aus_national_waste_plastics_2021_2022.csv"
                 },
                 "key": "Jurisdiction_State",
                 "fields": [
                     "Year",
                     "Category",
                     "Fate",
-                    "Tonnes"
+                    "Tonnes",
+                    "Total_plastics"
                 ]
             }
 
         },
         {
-            "filter": {
-                "and": [{
-                        "field": "Category",
-                        "equal": "Plastics"
-                    },
-                    {
-                        "field": "Fate",
-                        "equal": "Disposal"
-                    },
-                    {
-                        "field": "Year",
-                        "equal": "2020-2021"
-                    }
-                ]
-            }
-        },
-        { "calculate": "replace(datum.Tonnes, ',', '')", "as": "Tonnes" },
-        { "calculate": "parseInt(datum.Tonnes)", "as": "Tonnes" }
+            "calculate": "datum.Tonnes/datum.Total_plastics",
+            "as": "PercentOfDisposalPlastics"
+
+        }
     ],
     "encoding": {
         "color": {
-            "field": "Tonnes",
-            "type": "quantitative"
+            "field": "PercentOfDisposalPlastics",
+            "type": "quantitative",
+            "legend": {
+                "title": "Percentage of disposal plastic waste",
+                "format": "%"
+            }
         },
         "tooltip": [{
                 "field": "properties.STE_NAME21",
@@ -61,9 +52,10 @@
                 "title": "State"
             },
             {
-                "field": "Tonnes",
+                "field": "PercentOfDisposalPlastics",
                 "type": "quantitative",
-                "title": "Plastics Waste (Tonnes)"
+                "title": "Percentage of disposal plastics",
+                "format": ".1%"
             }
         ]
     }
